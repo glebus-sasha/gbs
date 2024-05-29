@@ -1,3 +1,9 @@
+# Custom
+.nextflow.log*
+work
+results
+.nextflow
+
 # History files
 .Rhistory
 .Rapp.history
