@@ -12,7 +12,7 @@ process VARCALL {
     path fai
 
     output:
-    tuple val(sid), path("${sid}.vcf"),      emit:vcf
+    path("${sid}.vcf"),      emit:vcf
 
     script:
     """    

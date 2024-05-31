@@ -10,6 +10,7 @@ include { FAINDEX }             from './processes/faindex.nf'
 include { BAMINDEX }            from './processes/bamindex.nf'
 include { VARCALL }             from './processes/varcall.nf'
 include { REPORT }              from './processes/report.nf'
+include { CLUSTER }              from './processes/cluster.nf'
 
 // Logging pipeline information
 log.info """\
@@ -72,27 +73,23 @@ workflow {
     FAINDEX(params.reference)
     BAMINDEX(ALIGN.out.bam)
     VARCALL(params.reference, BAMINDEX.out.bai, FAINDEX.out.fai)
-    REPORT(TRIM.out.json.collect(), QCONTROL.out.zip.collect(), FLAGSTAT.out.flagstat.collect())
-    
-    // Make the pipeline reports directory if it needs
-    if ( params.reports ) {
-        def pipeline_report_dir = new File("${params.outdir}/pipeline_info/")
-        pipeline_report_dir.mkdirs()
-    }
+//    REPORT(TRIM.out.json.collect(), QCONTROL.out.zip.collect(), FLAGSTAT.out.flagstat.collect())
+    CLUSTER(VARCALL.out.vcf.collect())
 }
 
 // Log pipeline execution summary on completion
 workflow.onComplete {
     log.info """\033[0;32m\
-        Pipeline execution summary
-        ---------------------------
-        Completed at: ${workflow.complete.format('yyyy-MM-dd_HH-mm-ss')}
-        Duration    : ${workflow.duration}
-        Success     : ${workflow.success}
-        workDir     : ${workflow.workDir}
-        exit status : ${workflow.exitStatus}
-        \033[0m"""
-        .stripIndent()
+    
+    Pipeline execution summary
+    ---------------------------
+    Completed at: ${workflow.complete.format('yyyy-MM-dd_HH-mm-ss')}
+    Duration    : ${workflow.duration}
+    Success     : ${workflow.success}
+    workDir     : ${workflow.workDir}
+    exit status : ${workflow.exitStatus}
+    \033[0m"""
+    .stripIndent()
         
     log.info ( workflow.success ? "\nDone" : "\nOops" )
 }
