@@ -1,2 +1,2 @@
 # gbs
-Call GBS using custom R scripts (on cows)
+Call GBS using custom R scripts for clustering (on cows)
