@@ -9,8 +9,9 @@ include { QUALIMAP }            from './processes/qualimap.nf'
 include { FAINDEX }             from './processes/faindex.nf'
 include { BAMINDEX }            from './processes/bamindex.nf'
 include { VARCALL }             from './processes/varcall.nf'
+include { BSFSTATS }            from './processes/bcfstats.nf'
 include { REPORT }              from './processes/report.nf'
-include { CLUSTER }              from './processes/cluster.nf'
+include { CLUSTER }             from './processes/cluster.nf'
 
 // Logging pipeline information
 log.info """\
@@ -73,7 +74,8 @@ workflow {
     FAINDEX(params.reference)
     BAMINDEX(ALIGN.out.bam)
     VARCALL(params.reference, BAMINDEX.out.bai, FAINDEX.out.fai)
-//    REPORT(TRIM.out.json.collect(), QCONTROL.out.zip.collect(), FLAGSTAT.out.flagstat.collect())
+    BSFSTATS(VARCALL.out.tup_vcf)
+    REPORT(TRIM.out.json.collect(), QCONTROL.out.zip.collect(), FLAGSTAT.out.flagstat.collect(), BSFSTATS.out.bcfstats.collect())
     CLUSTER(VARCALL.out.vcf.collect())
 }
 
@@ -81,14 +83,14 @@ workflow {
 workflow.onComplete {
     log.info """\033[0;32m\
     
-    Pipeline execution summary
-    ---------------------------
-    Completed at: ${workflow.complete.format('yyyy-MM-dd_HH-mm-ss')}
-    Duration    : ${workflow.duration}
-    Success     : ${workflow.success}
-    workDir     : ${workflow.workDir}
-    exit status : ${workflow.exitStatus}
-    \033[0m"""
+Pipeline execution summary
+---------------------------
+Completed at: ${workflow.complete.format('yyyy-MM-dd_HH-mm-ss')}
+Duration    : ${workflow.duration}
+Success     : ${workflow.success}
+workDir     : ${workflow.workDir}
+exit status : ${workflow.exitStatus}
+\033[0m"""
     .stripIndent()
         
     log.info ( workflow.success ? "\nDone" : "\nOops" )

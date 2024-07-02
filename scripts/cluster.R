@@ -9,6 +9,7 @@ library(ggplot2)
 library(readr)
 library(ape)
 
+# Read command line arguments
 args <- commandArgs(TRUE)
 input_dir <- args[1]
 combined_gds_file <- args[2]

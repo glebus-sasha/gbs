@@ -3,7 +3,7 @@ process CLUSTER {
     tag "$vcf"
     publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/CLUSTER"
 //	debug true
-//  errorStrategy 'ignore'
+  errorStrategy 'ignore'
 	
     input:
     path vcf
