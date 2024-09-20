@@ -44,3 +44,8 @@ flowchart TB
     v14 --> v10
 
 ```
+
+## Contributors
+
+- Oxana Kolpakova ([@OxanaKolpakova](https://github.com/OxanaKolpakova))
+- Glebus Aleksandr ([@glebus-sasha](https://github.com/glebus-sasha/))
