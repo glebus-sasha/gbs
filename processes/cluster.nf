@@ -17,6 +17,6 @@ process CLUSTER {
     """    
     mkdir .temp
     mv $vcf .temp
-    Rscript ${workflow.workDir}/../scripts/cluster.R ./.temp combined.gds ./
+    Rscript ${projectDir}/scripts/cluster.R ./.temp combined.gds ./
     """
 }
